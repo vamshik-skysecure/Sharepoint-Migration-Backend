@@ -1,0 +1,117 @@
+{
+  "info": {
+    "name": "KM Backend – Person 1 (Upload, Workflow, Redaction, Dashboard)",
+    "_postman_id": "km-backend-person1-collection",
+    "description": "Collection for KM Backend Person 1 APIs: File Upload → Workflow → Redaction → Dashboard → Audit",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1️⃣ File Ingestion (Upload)",
+      "item": [
+        {
+          "name": "Upload Document (Draft)",
+          "request": {
+            "method": "POST",
+            "url": "http://localhost:5000/api/documents/upload",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "file", "type": "file", "src": "" },
+                { "key": "uploader", "type": "text", "value": "Sanjana" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "2️⃣ Workflow Management (Draft → Submitted → Published → Revision Requested)",
+      "item": [
+        {
+          "name": "Update Workflow Status",
+          "request": {
+            "method": "PATCH",
+            "url": "http://localhost:5000/api/documents/{{fileId}}/status",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"newStatus\": \"Submitted\",\n  \"user\": \"Sanjana\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Move to Published",
+          "request": {
+            "method": "PATCH",
+            "url": "http://localhost:5000/api/documents/{{fileId}}/status",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"newStatus\": \"Published\",\n  \"user\": \"Sanjana\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Send for Revision Request",
+          "request": {
+            "method": "PATCH",
+            "url": "http://localhost:5000/api/documents/{{fileId}}/status",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"newStatus\": \"RevisionRequested\",\n  \"user\": \"KM Reviewer\"\n}"
+            }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "3️⃣ PII & Redaction APIs",
+      "item": [
+        {
+          "name": "Auto Redact Sensitive Data",
+          "request": {
+            "method": "POST",
+            "url": "http://localhost:5000/api/documents/{{fileId}}/redact",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"Email me at sanjana@example.com\",\n  \"flagged\": [\"sanjana@example.com\"]\n}"
+            }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "4️⃣ Dashboard",
+      "item": [
+        {
+          "name": "Get All Document Status",
+          "request": {
+            "method": "GET",
+            "url": "http://localhost:5000/api/dashboard",
+            "header": []
+          }
+        }
+      ]
+    }
+  ],
+
+  "variable": [
+    { "key": "fileId", "value": "" },
+    { "key": "uploader", "value": "Sanjana" }
+  ]
+}

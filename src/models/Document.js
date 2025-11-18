@@ -1,15 +1,14 @@
 import mongoose from "mongoose";
 
-const DocumentSchema = new mongoose.Schema({
-  fileUrl: String,
+const documentSchema = new mongoose.Schema({
+  fileId: { type: String, required: true },
+  fileName: String,
+  filePath: String,
+  uploader: String,
   status: { type: String, default: "Draft" },
-  metadataSuggested: Object, // Holds extracted metadata suggestions
-  metadataFinal: Object,
-  flaggedSections: Array,
-  submitterResponse: Object,
-  kmReview: Object,
-  auditTrail: Array,
-}, { timestamps: true });
+  metadata: Object,
+  flaggedItems: Array,
+  createdAt: { type: Date, default: Date.now }
+});
 
-const Document = mongoose.model("Document", DocumentSchema);
-export default Document;
+export default mongoose.model("Document", documentSchema);
