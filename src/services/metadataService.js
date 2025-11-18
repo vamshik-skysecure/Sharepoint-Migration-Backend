@@ -14,3 +14,4 @@ export const extractMetadataFromText = (textContent) => {
 
   return suggestions;
 };
+
